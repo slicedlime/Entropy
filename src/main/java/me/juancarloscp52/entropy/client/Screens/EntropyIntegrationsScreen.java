@@ -179,15 +179,15 @@ public class EntropyIntegrationsScreen extends Screen {
         });
 
         Text showPollStatusText = Text.translatable("entropy.options.integrations.showPollStatus");
-        showPollStatus = new CheckboxWidget(this.width / 2 - ((textRenderer.getWidth(showPollStatusText))+20), 140, 150, 20, showPollStatusText, integrationsSettings.showCurrentPercentage);
+        showPollStatus = new CheckboxWidget(this.width / 2 - ((textRenderer.getWidth(showPollStatusText))+20), 140, showPollStatusText, textRenderer, integrationsSettings.showCurrentPercentage, CheckboxWidget.Callback.EMPTY);
         this.addDrawableChild(showPollStatus);
 
         Text showUpcomingEventsText = Text.translatable("entropy.options.integrations.showUpcomingEvents");
-        showUpcomingEvents = new CheckboxWidget(this.width / 2 + (20), 140, 150, 20, showUpcomingEventsText, integrationsSettings.showUpcomingEvents);
+        showUpcomingEvents = new CheckboxWidget(this.width / 2 + (20), 140, showUpcomingEventsText, textRenderer, integrationsSettings.showUpcomingEvents, CheckboxWidget.Callback.EMPTY);
         this.addDrawableChild(showUpcomingEvents);
 
         Text sendChatMessagesText = Text.translatable("entropy.options.integrations.twitch.sendChatFeedBack");
-        sendChatMessages = new CheckboxWidget(this.width / 2 - ((textRenderer.getWidth(sendChatMessagesText) / 2) + 11), 145, 150, 20, sendChatMessagesText, integrationsSettings.sendChatMessages);
+        sendChatMessages = new CheckboxWidget(this.width / 2 - ((textRenderer.getWidth(sendChatMessagesText) / 2) + 11), 145, sendChatMessagesText, textRenderer, integrationsSettings.sendChatMessages, CheckboxWidget.Callback.EMPTY);
         this.addDrawableChild(sendChatMessages);
 
 

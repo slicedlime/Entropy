@@ -43,5 +43,6 @@
   },
   "suggests": {
     "modmenu": ">=3.1.0"
-  }
+  },
+  "accessWidener": "entropy.accesswidener"
 }

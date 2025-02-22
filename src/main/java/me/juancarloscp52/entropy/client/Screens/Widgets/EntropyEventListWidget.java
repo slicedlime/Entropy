@@ -32,6 +32,7 @@ import me.juancarloscp52.entropy.mixin.EntryListWidgetAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -47,11 +48,14 @@ import net.minecraft.util.math.MathHelper;
 
 public class EntropyEventListWidget extends ElementListWidget<EntropyEventListWidget.ButtonEntry> {
     public final List<ButtonEntry> visibleEntries = new ArrayList<>();
+    private final TextRenderer textRenderer;
 
-    public EntropyEventListWidget(MinecraftClient minecraftClient, int i, int j, int k, int l, int m) {
-        super(minecraftClient, i, j, k, l, m);
+    public EntropyEventListWidget(MinecraftClient minecraftClient, int width, int height, int x, int y, int itemHeight) {
+        super(minecraftClient, width, height, y, itemHeight);
+        this.setX(x);
         this.centerListVertically = false;
         this.setRenderBackground(true);
+        this.textRenderer = minecraftClient.textRenderer;
     }
 
     public void addAllFromRegistry() {
@@ -67,7 +71,7 @@ public class EntropyEventListWidget extends ElementListWidget<EntropyEventListWi
     }
 
     public int addEvent(EventInfo eventInfo) {
-        return this.addEntry(EntropyEventListWidget.ButtonEntry.create(eventInfo));
+        return this.addEntry(EntropyEventListWidget.ButtonEntry.create(eventInfo, textRenderer));
     }
 
     @Override
@@ -103,7 +107,7 @@ public class EntropyEventListWidget extends ElementListWidget<EntropyEventListWi
                     return true;
                 }
             } else if (button == 0) {
-                this.clickedHeader((int)(mouseX - (double)(this.left + this.width / 2 - this.getRowWidth() / 2)), (int)(mouseY - (double)this.top) + (int)this.getScrollAmount() - 4);
+                this.clickedHeader((int)(mouseX - (double)(this.getX() + this.width / 2 - this.getRowWidth() / 2)), (int)(mouseY - (double)this.getY()) + (int)this.getScrollAmount() - 4);
                 return true;
             }
 
@@ -113,10 +117,10 @@ public class EntropyEventListWidget extends ElementListWidget<EntropyEventListWi
 
     protected ButtonEntry getEntryAtPositionRespectingSearch(double x, double y) {
         int i = this.getRowWidth() / 2;
-        int j = this.left + this.width / 2;
+        int j = this.getX() + this.width / 2;
         int k = j - i;
         int l = j + i;
-        int m = MathHelper.floor(y - (double)this.top) - this.headerHeight + (int)this.getScrollAmount() - 4;
+        int m = MathHelper.floor(y - (double)this.getY()) - this.headerHeight + (int)this.getScrollAmount() - 4;
         int n = m / this.itemHeight;
         return x < (double)this.getScrollbarPositionX() && x >= (double)k && x <= (double)l && n >= 0 && m >= 0 && n < this.getEntryCount() ? this.visibleEntries.get(n) : null;
     }
@@ -156,12 +160,12 @@ public class EntropyEventListWidget extends ElementListWidget<EntropyEventListWi
             this.eventInfo = eventInfo;
         }
 
-        public static EntropyEventListWidget.ButtonEntry create(EventInfo eventInfo) {
+        public static EntropyEventListWidget.ButtonEntry create(EventInfo eventInfo, TextRenderer textRenderer) {
             EntropySettings settings = Entropy.getInstance().settings;
             String eventID = eventInfo.id;
             boolean isDisabledByAccessibilityMode = eventInfo.event.isDisabledByAccessibilityMode() && Entropy.getInstance().settings.accessibilityMode;
             boolean enableCheckbox = !settings.disabledEvents.contains(eventID) && !isDisabledByAccessibilityMode;
-            CheckboxWidget checkbox = new CheckboxWidget(0, 0, MinecraftClient.getInstance().getWindow().getScaledWidth(), 20, Text.translatable(EventRegistry.getTranslationKey(eventID)), enableCheckbox) {
+            CheckboxWidget checkbox = new CheckboxWidget(0, 0, Text.translatable(EventRegistry.getTranslationKey(eventID)), textRenderer, enableCheckbox, CheckboxWidget.Callback.EMPTY) {
                 @Override
                 public void onPress() {
                     if(!isDisabledByAccessibilityMode)
@@ -183,7 +187,7 @@ public class EntropyEventListWidget extends ElementListWidget<EntropyEventListWi
                 drawContext.drawTexture(ICON_OVERLAY_LOCATION, x, y - 6, 64, 32, 32, 32, 256, 256);
 
                 if(mouseX >= x && mouseX <= x + 32 && mouseY >= y && mouseY <= y + entryHeight)
-                    MinecraftClient.getInstance().currentScreen.setTooltip(ACCESSIBILITY_TOOLTIP, new WidgetTooltipPositioner(checkbox), false);
+                    MinecraftClient.getInstance().currentScreen.setTooltip(ACCESSIBILITY_TOOLTIP, new WidgetTooltipPositioner(checkbox.getNavigationFocus()), false);
             }
         }
 
