@@ -90,7 +90,7 @@ public class EntropyEventConfigurationScreen extends Screen {
         RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
         MatrixStack matrices = drawContext.getMatrices();
         matrices.push();
-        matrices.translate(this.width / 2f - 18.8f, 0, 0);
+        matrices.translate(this.width - 45f, 10, 0);
         matrices.scale(0.2f, 0.2f, 0.2f);
         drawContext.drawTexture(LOGO, 0, 0, 0, 0, 188, 187);
         matrices.pop();
