@@ -51,6 +51,7 @@ public class EntropyEventListWidget extends ElementListWidget<EntropyEventListWi
     public EntropyEventListWidget(MinecraftClient minecraftClient, int i, int j, int k, int l, int m) {
         super(minecraftClient, i, j, k, l, m);
         this.centerListVertically = false;
+        this.setRenderBackground(true);
     }
 
     public void addAllFromRegistry() {
@@ -118,27 +119,6 @@ public class EntropyEventListWidget extends ElementListWidget<EntropyEventListWi
         int m = MathHelper.floor(y - (double)this.top) - this.headerHeight + (int)this.getScrollAmount() - 4;
         int n = m / this.itemHeight;
         return x < (double)this.getScrollbarPositionX() && x >= (double)k && x <= (double)l && n >= 0 && m >= 0 && n < this.getEntryCount() ? this.visibleEntries.get(n) : null;
-    }
-
-    @Override
-    protected void renderList(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-        int rowLeft = this.getRowLeft();
-        int rowWidth = this.getRowWidth();
-        int entryHeight = this.itemHeight - 4;
-        int entryCount = this.children().size();
-        int drawIndex = 0;
-
-        for (int index = 0; index < entryCount; ++index) {
-            int rowTop = this.getRowTop(drawIndex);
-            int rowBottom = rowTop + this.itemHeight;
-
-            if (this.getEntry(index).checkbox.visible) {
-                drawIndex++;
-
-                if (rowBottom >= this.top && rowTop <= this.bottom)
-                    this.renderEntry(drawContext, mouseX, mouseY, delta, index, rowLeft, rowTop, rowWidth, entryHeight);
-            }
-        }
     }
 
     public void updateVisibleEntries(String searchText, FilterMode filterMode) {

@@ -53,7 +53,7 @@ public class EntropyEventConfigurationScreen extends Screen {
     }
 
     protected void init() {
-        list = new EntropyEventListWidget(MinecraftClient.getInstance(), this.width, this.height, 56, this.height - 32, 25);
+        list = addDrawableChild(new EntropyEventListWidget(MinecraftClient.getInstance(), this.width, this.height, 56, this.height - 32, 25));
         list.addAllFromRegistry();
         this.addSelectableChild(list);
         // Done button
@@ -84,8 +84,8 @@ public class EntropyEventConfigurationScreen extends Screen {
     }
 
     public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-        this.renderBackground(drawContext, mouseX, mouseY, delta);
-
+        super.render(drawContext, mouseX, mouseY, delta);
+        drawContext.drawTextWithShadow(textRenderer, this.title, this.width / 2 - textRenderer.getWidth(this.title) / 2, 12, 14737632);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
         MatrixStack matrices = drawContext.getMatrices();
@@ -95,9 +95,6 @@ public class EntropyEventConfigurationScreen extends Screen {
         drawContext.drawTexture(LOGO, 0, 0, 0, 0, 188, 187);
         matrices.pop();
         RenderSystem.disableBlend();
-        this.list.render(drawContext, mouseX, mouseY, delta);
-        drawContext.drawTextWithShadow(textRenderer, this.title, this.width / 2 - textRenderer.getWidth(this.title) / 2, 12, 14737632);
-        super.render(drawContext, mouseX, mouseY, delta);
     }
 
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
