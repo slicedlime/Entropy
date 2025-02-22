@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 public class YoutubeIntegrations implements Integrations {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    private static final int BASE_POLLING_INTERVAL = 4800;
+    private static final int BASE_POLLING_INTERVAL = 7500;
     private static final int THRESHOLD_INTERVAL = 3000;
     private static final int END_POLLING_OFFSET = 300;
 
