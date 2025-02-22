@@ -17,9 +17,11 @@
 
 package me.juancarloscp52.entropy.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.juancarloscp52.entropy.Entropy;
 import me.juancarloscp52.entropy.NetworkingConstants;
 import me.juancarloscp52.entropy.client.integrations.Integrations;
 import me.juancarloscp52.entropy.client.websocket.OverlayServer;
@@ -42,7 +44,7 @@ public class VotingClient {
     int pollWidth = 195;
     int totalVotesCount = 0;
     boolean enabled = false;
-    Integrations integrations;
+    List<Integrations> integrations = new ArrayList<>();
     MinecraftClient client = MinecraftClient.getInstance();
 
     OverlayServer overlayServer;
@@ -58,7 +60,7 @@ public class VotingClient {
 
     public void disable() {
         enabled = false;
-        integrations.stop();
+        integrations.forEach(Integrations::stop);
         overlayServer.stop();
     }
     public void removeVote(int index, String userId) {
@@ -131,8 +133,8 @@ public class VotingClient {
         }
     }
 
-    public void setIntegrations(Integrations integration) {
-        this.integrations = integration;
+    public void addIntegrations(Integrations integration) {
+        this.integrations.add(integration);
     }
 
     public void render(DrawContext drawContext) {
@@ -151,7 +153,7 @@ public class VotingClient {
             return;
 
         double ratio = this.totalVotesCount > 0 ? (double) this.totalVotes[i] / this.totalVotesCount : 0;
-        int altOffset = (this.voteID % 2) == 0 && (EntropyClient.getInstance().integrationsSettings.integrationType!=2) ? 4 : 0;
+        int altOffset = (this.voteID % 2) == 0 && Entropy.getInstance().settings.alternateOffsets ? 4 : 0;
         drawContext.fill( 10, 31 + (i * 18), pollWidth+45+ 10 , 35 + (i * 18) + 10, ColorHelper.Argb.getArgb(150,0, 0, 0));
         if(EntropyClient.getInstance().integrationsSettings.showCurrentPercentage)
             drawContext.fill( 10, 31 + (i * 18), 10 + MathHelper.floor((pollWidth+45) * ratio), (35 + (i * 18) + 10), this.getColor(150));
@@ -166,12 +168,12 @@ public class VotingClient {
 
     public void sendPoll(int voteID, List<String> events) {
         if (EntropyClient.getInstance().integrationsSettings.sendChatMessages)
-            integrations.sendPoll(voteID,events);
-        this.overlayServer.onNewVote(voteID,events);
+            integrations.forEach(integration -> integration.sendPoll(voteID, events));
+        this.overlayServer.onNewVote(voteID, events);
     }
     public void sendMessage(String message) {
         if (EntropyClient.getInstance().integrationsSettings.sendChatMessages)
-            integrations.sendMessage(message);
+            integrations.forEach(integration -> integration.sendMessage(message));
     }
     public void sendVotes() {
         if (voteID == -1)
@@ -185,6 +187,6 @@ public class VotingClient {
     }
 
     public int getColor(int alpha) {
-        return integrations.getColor(alpha);
+        return integrations.get(0).getColor(alpha);
     }
 }

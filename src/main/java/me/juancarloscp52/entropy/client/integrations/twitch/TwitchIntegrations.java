@@ -18,6 +18,7 @@
 package me.juancarloscp52.entropy.client.integrations.twitch;
 
 import me.juancarloscp52.entropy.client.EntropyClient;
+import me.juancarloscp52.entropy.client.EntropyIntegrationType;
 import me.juancarloscp52.entropy.client.EntropyIntegrationsSettings;
 import me.juancarloscp52.entropy.client.VotingClient;
 import me.juancarloscp52.entropy.client.integrations.Integrations;
@@ -60,9 +61,9 @@ public class TwitchIntegrations extends ListenerAdapter implements Integrations 
                 .setEncoding(StandardCharsets.UTF_8)
                 .addServer("irc.chat.twitch.tv", 6697)
                 .setSocketFactory(SSLSocketFactory.getDefault())
-                .setName(settings.channel.toLowerCase())
-                .setServerPassword(settings.authToken.startsWith("oauth:") ? settings.authToken : "oauth:" + settings.authToken)
-                .addAutoJoinChannel("#" + settings.channel.toLowerCase())
+                .setName(settings.twitchChannel.toLowerCase())
+                .setServerPassword(settings.twitchAuthToken.startsWith("oauth:") ? settings.twitchAuthToken : "oauth:" + settings.twitchAuthToken)
+                .addAutoJoinChannel("#" + settings.twitchChannel.toLowerCase())
                 .addListener(this)
                 .setAutoSplitMessage(false)
                 .buildConfiguration();
@@ -103,7 +104,7 @@ public class TwitchIntegrations extends ListenerAdapter implements Integrations 
 
     @Override
     public void onMessage(MessageEvent event) {
-        EntropyClient.getInstance().clientEventHandler.votingClient.processVote(event.getMessage(), event.getUser().getLogin());
+        votingClient.processVote(event.getMessage(), event.getUser().getLogin());
     }
 
     @Override
@@ -130,16 +131,21 @@ public class TwitchIntegrations extends ListenerAdapter implements Integrations 
         for (int i = 0; i < events.size(); i++)
             stringBuilder.append(String.format("[ %d - %s ] ", 1 + i + altOffset, I18n.translate(events.get(i))));
 
-        ircChatBot.sendIRC().message("#" + settings.channel.toLowerCase(), "/me [Entropy Bot] " + stringBuilder);
+        ircChatBot.sendIRC().message("#" + settings.twitchChannel.toLowerCase(), "/me [Entropy Bot] " + stringBuilder);
     }
 
     @Override
     public void sendMessage(String message) {
-        ircChatBot.sendIRC().message("#" + settings.channel.toLowerCase(), "/me [Entropy Bot] " + message);
+        ircChatBot.sendIRC().message("#" + settings.twitchChannel.toLowerCase(), "/me [Entropy Bot] " + message);
     }
 
     @Override
     public int getColor(int alpha) {
         return ColorHelper.Argb.getArgb(alpha,145, 70, 255);
+    }
+
+    @Override
+    public EntropyIntegrationType type() {
+        return EntropyIntegrationType.TWITCH;
     }
 }

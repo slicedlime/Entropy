@@ -54,4 +54,5 @@ public class EntropySettings {
     public UIStyle UIstyle = UIStyle.GTAV;
     public List<String> disabledEvents = new ArrayList<>();
     public boolean accessibilityMode = false;
+    public boolean alternateOffsets = false;
 }

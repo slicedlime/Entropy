@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 import me.juancarloscp52.entropy.client.EntropyClient;
+import me.juancarloscp52.entropy.client.EntropyIntegrationType;
 import me.juancarloscp52.entropy.client.VotingClient;
 import me.juancarloscp52.entropy.client.integrations.Integrations;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -100,5 +101,10 @@ public class DiscordIntegration implements Integrations {
     @Override
     public int getColor(int alpha) {
         return ColorHelper.Argb.getArgb(alpha,88, 101, 242);
+    }
+
+    @Override
+    public EntropyIntegrationType type() {
+        return EntropyIntegrationType.DISCORD;
     }
 }

@@ -17,11 +17,13 @@
 
 package me.juancarloscp52.entropy.client;
 
-public class EntropyIntegrationsSettings {
+import java.util.Set;
 
-    public int integrationType = 0;
-    public String authToken = "";
-    public String channel = "";
+public class EntropyIntegrationsSettings {
+    public Set<EntropyIntegrationType> enabledIntegrations;
+
+    public String twitchAuthToken = "";
+    public String twitchChannel = "";
     public boolean sendChatMessages = true;
     public boolean showCurrentPercentage = true;
 

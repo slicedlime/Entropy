@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.juancarloscp52.entropy.Entropy;
+import me.juancarloscp52.entropy.EntropySettings;
 import me.juancarloscp52.entropy.EntropySettings.UIStyle;
 import me.juancarloscp52.entropy.Variables;
 import me.juancarloscp52.entropy.client.UIStyles.GTAVUIRenderer;
@@ -53,22 +54,26 @@ public class ClientEventHandler {
         this.eventCountDown = timerDuration;
         this.serverIntegrations = integrations;
 
-        Entropy.getInstance().settings.baseEventDuration = baseEventDuration;
+        final EntropySettings settings = Entropy.getInstance().settings;
+        final EntropyIntegrationsSettings integrationSettings = EntropyClient.getInstance().integrationsSettings;
+        settings.baseEventDuration = baseEventDuration;
 
-        if (Entropy.getInstance().settings.integrations && integrations) {
+        if (settings.integrations && integrations && !integrationSettings.enabledIntegrations.isEmpty()) {
             votingClient = new VotingClient();
-            votingClient.setIntegrations(switch(EntropyClient.getInstance().integrationsSettings.integrationType) {
-                case 1 -> new TwitchIntegrations(votingClient);
-                case 2 -> new DiscordIntegration(votingClient);
-                default  -> new YoutubeIntegrations(this, votingClient);
-            });
+            for (final EntropyIntegrationType integrationType : integrationSettings.enabledIntegrations) {
+                votingClient.addIntegrations(switch(integrationType) {
+                    case TWITCH -> new TwitchIntegrations(votingClient);
+                    case DISCORD -> new DiscordIntegration(votingClient);
+                    case YOUTUBE -> new YoutubeIntegrations(this, votingClient);
+                });
+            }
             votingClient.enable();
         }
 
-        if(Entropy.getInstance().settings.UIstyle == UIStyle.MINECRAFT){
+        if(settings.UIstyle == UIStyle.MINECRAFT){
             renderer = new MinecraftUIRenderer();
         }
-        else if (Entropy.getInstance().settings.UIstyle == UIStyle.GTAV) {
+        else if (settings.UIstyle == UIStyle.GTAV) {
             renderer = new GTAVUIRenderer(votingClient);
         }
 

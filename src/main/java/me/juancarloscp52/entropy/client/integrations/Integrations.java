@@ -17,6 +17,8 @@
 
 package me.juancarloscp52.entropy.client.integrations;
 
+import me.juancarloscp52.entropy.client.EntropyIntegrationType;
+
 import java.util.List;
 
 public interface Integrations {
@@ -31,4 +33,5 @@ public interface Integrations {
 
     int getColor(int alpha);
 
+    EntropyIntegrationType type();
 }

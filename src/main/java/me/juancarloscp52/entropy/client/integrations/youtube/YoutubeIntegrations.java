@@ -6,6 +6,7 @@ package me.juancarloscp52.entropy.client.integrations.youtube;
 
 import me.juancarloscp52.entropy.client.ClientEventHandler;
 import me.juancarloscp52.entropy.client.EntropyClient;
+import me.juancarloscp52.entropy.client.EntropyIntegrationType;
 import me.juancarloscp52.entropy.client.EntropyIntegrationsSettings;
 import me.juancarloscp52.entropy.client.VotingClient;
 import me.juancarloscp52.entropy.client.integrations.Integrations;
@@ -138,6 +139,11 @@ public class YoutubeIntegrations implements Integrations {
     @Override
     public int getColor(int alpha) {
         return ColorHelper.Argb.getArgb(alpha,255, 0, 0);
+    }
+
+    @Override
+    public EntropyIntegrationType type() {
+        return EntropyIntegrationType.YOUTUBE;
     }
 
 }
