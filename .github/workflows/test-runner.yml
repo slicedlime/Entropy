@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         java: [17]
-        minecraftVersion: [1.19.4-pre3]
+        minecraftVersion: [1.20.1]
     runs-on: ubuntu-latest
 
     steps:
@@ -37,7 +37,7 @@ jobs:
         run: ref="${GITHUB_REF#refs/heads/}" && echo "::set-output name=branch::${ref////-}"
         id: ref
       - name: "Upload Artifact"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: entropy-artifacts-${{ steps.ref.outputs.branch }}
           # Filter built files to disregard -sources and -dev, and leave only the minecraft-compatible jars.
