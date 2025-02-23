@@ -18,6 +18,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.tick.ChunkTickScheduler;
 
+import java.util.Set;
+
 public class SkyBlockEvent extends AbstractInstantEvent {
 
     private static byte[][][] _leavesPlacement = new byte[][][] {
@@ -144,7 +146,7 @@ public class SkyBlockEvent extends AbstractInstantEvent {
             var playerPos = startPos.add(-4, 3, 1);
 
             serverPlayerEntity.stopRiding();
-            serverPlayerEntity.teleport(playerPos.getX() + .5, playerPos.getY(), playerPos.getZ() + .5);
+            serverPlayerEntity.teleport(serverPlayerEntity.getServerWorld(), playerPos.getX() + .5, playerPos.getY(), playerPos.getZ() + .5, Set.of(), serverPlayerEntity.getYaw(), serverPlayerEntity.getPitch());
         }
     }
 

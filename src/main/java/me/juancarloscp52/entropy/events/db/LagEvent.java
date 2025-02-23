@@ -2,6 +2,7 @@ package me.juancarloscp52.entropy.events.db;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import me.juancarloscp52.entropy.Entropy;
 import me.juancarloscp52.entropy.events.AbstractTimedEvent;
@@ -35,7 +36,7 @@ public class LagEvent extends AbstractTimedEvent {
                 BlockPos pos = player_positions.get(serverPlayerEntity);
                 if (pos != null) {
                     serverPlayerEntity.stopRiding();
-                    serverPlayerEntity.teleport(pos.getX(), pos.getY(), pos.getZ());
+                    serverPlayerEntity.teleport(serverPlayerEntity.getServerWorld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), serverPlayerEntity.getYaw(), serverPlayerEntity.getPitch());
                 }
 
             });

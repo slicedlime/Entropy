@@ -23,6 +23,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Set;
+
 public class TeleportHeavenEvent extends AbstractInstantEvent {
 
     @Override
@@ -41,7 +43,7 @@ public class TeleportHeavenEvent extends AbstractInstantEvent {
             }
 
             serverPlayerEntity.stopRiding();
-            serverPlayerEntity.teleport(serverPlayerEntity.getX(), 380, serverPlayerEntity.getZ());
+            serverPlayerEntity.teleport(serverPlayerEntity.getServerWorld(), serverPlayerEntity.getX(), 380.0, serverPlayerEntity.getZ(), Set.of(), serverPlayerEntity.getYaw(), serverPlayerEntity.getPitch());
         });
     }
 }
